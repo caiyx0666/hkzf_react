@@ -13,6 +13,7 @@ export default class Home extends Component {
                 <Route path="/home/houselist" component={HouseList} />
                 <Route path="/home/news" component={News} />
                 <Route path="/home/profile" component={Profile} />
+                <div>首页TabBa</div>
             </div>
         )
     }
