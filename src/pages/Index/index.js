@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Carousel,Grid,Flex } from 'antd-mobile';
+import React from 'react'
+import { Carousel, Grid, Flex } from 'antd-mobile';
 import axios from 'axios'
 import './index.scss'
 
@@ -9,71 +9,136 @@ import Nav2 from '../../assets/images/nav-2.png'
 import Nav3 from '../../assets/images/nav-3.png'
 import Nav4 from '../../assets/images/nav-4.png'
 
-const navs = [
-    { img: Nav1, title: '整租' },
-    { img: Nav2, title: '合租' },
-    { img: Nav3, title: '地图找房' },
-    { img: Nav4, title: '去出租' }
+let navs = [
+    { img: Nav1, title: '整租', path: '/home/houselist' },
+    { img: Nav2, title: '合租', path: '/home/houselist' },
+    { img: Nav3, title: '地图找房', path: '/map' },
+    { img: Nav4, title: '去出租', path: '/login' }
 ]
-  
-  const data1 = Array.from(new Array(4)).map(() => ({
-    icon: 'https://gw.alipayobjects.com/zos/rmsportal/WXoqXTHrSnRcUwEaQgXJ.png',
-  }));
 
-export default class Index extends Component {
-    render() {
-        return (
-            <div>
-                <App />
-            </div>
-        )
-    }
-}
-
-class App extends React.Component {
+export default class Index extends React.Component {
     state = {
         swipers: [],
         imgHeight: 212,
+        news: [],
+        groups: []
     }
     componentDidMount() {
         this.getSwipers()
+        this.getGroups()
+        this.getNews()
     }
 
+    // 导航栏点击跳转事件
+    handleJump(item) {
+        this.props.history.push(item.path)
+    }
+
+    // 获取轮播图信息
     async getSwipers() {
-        const res = await axios.get('http://localhost:8080/home/swiper')
-        console.log(res.data.body)
+        let res = await axios.get('http://localhost:8080/home/swiper')
         this.setState({
             swipers: res.data.body
         })
     }
 
+    // 获取租房小组信息
+    async getGroups() {
+        const res = await axios.get('http://localhost:8080/home/groups', {
+            params: {
+                area: 'AREA%7C88cff55c-aaa4-e2e0'
+            }
+        })
+        this.setState({
+            groups: res.data.body
+        })
+    }
+
+    // 获取最新资讯信息
+    async getNews() {
+        const res = await axios.get('http://localhost:8080/home/news', {
+            params: {
+                area: 'AREA%7C88cff55c-aaa4-e2e0'
+            }
+        })
+        this.setState({
+            news: res.data.body
+        })
+    }
+
+    // 渲染轮播图列表
+    renderSwipers = () => (this.state.swipers.length ? <Carousel
+        autoplay={true}
+        infinite
+    >
+        {this.state.swipers.map(item => (
+            <a
+                key={item.id}
+                href="http://www.alipay.com"
+                style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
+            >
+                <img
+                    src={`http://localhost:8080${item.imgSrc}`}
+                    alt=""
+                    style={{ width: '100%', verticalAlign: 'top' }}
+                />
+            </a>
+        ))}
+    </Carousel> : null)
+
+    // 渲染租房小组信息
+    renderItem = (item) =>
+        (<Flex key={item.id} className="group-item">
+            <Flex.Item className="item">
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+            </Flex.Item>
+            <Flex.Item className="item">
+                <img src={`http://localhost:8080${item.imgSrc}`} alt="" />
+            </Flex.Item>
+        </Flex>)
+
+    // 渲染最新资讯列表 
+    renderNews = (item) => (
+        <Flex className="news-item">
+            <img src={`http://localhost:8080${item.imgSrc}`} alt="" />
+            <Flex justify="center" className="desc" direction="column" align="start">
+                <h3>{item.title}</h3>
+                <Flex justify="between" className="info">
+                    <span>{item.from}</span>
+                    <span>{item.date}</span>
+                </Flex>
+            </Flex>
+        </Flex>
+    )
+
     render() {
         return (
             <div className='index'>
 
+                {/* 轮播图区域 */}
                 <div className='swipers'>
-                    {this.state.swipers.length ? <Carousel
-                        autoplay={true}
-                        infinite
-                    >
-                        {this.state.swipers.map(item => (
-                            <a
-                                key={item.id}
-                                href="http://www.alipay.com"
-                                style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
-                            >
-                                <img
-                                    src={`http://localhost:8080${item.imgSrc}`}
-                                    alt=""
-                                    style={{ width: '100%', verticalAlign: 'top' }}
-                                />
-                            </a>
-                        ))}
-                    </Carousel> : null}
+                    <div className="search-box">
+                        <div className="search">
+                            <div className="location">
+                                广州
+                                <i className="iconfont icon-arrow"></i>
+                            </div>
+                            <div className="form">
+                                <i className="iconfont icon-seach"></i>
+                                <span>请输入小区或地址</span>
+                            </div>
+                        </div>
+                        <i className="iconfont icon-map"></i>
+                    </div>
+                    {this.renderSwipers()}
                 </div>
 
+                {/* 导航栏 */}
                 <Flex justify='around' className='nav'>
-                    {navs.map((item, index) => <Flex.Item key={index}><img src={item.img} alt="" /> <h2>{item.title}</h2></Flex.Item>)}
+                    {navs.map((item, index) => (
+                        <Flex.Item key={index} onClick={this.handleJump.bind(this, item)} ><img src={item.img} alt="" /> <h2>{item.title}</h2></Flex.Item>
+                    ))}
                 </Flex>
 
                 {/* 租房小组 */}
@@ -83,25 +148,25 @@ class App extends React.Component {
                         <span className="more">更多</span>
                     </div>
 
-                    <Grid data={data1}
+                    <Grid data={this.state.groups}
                         columnNum={2}
                         square={false}
                         hasLine={false}
-                        renderItem={dataItem => (
-                            <Flex className="group-item">
-                                <Flex.Item className="item">
-                                    <h3>家住回龙观</h3>
-                                    <p>归属的感觉</p>
-                                </Flex.Item>
-                                <Flex.Item className="item">
-                                    <img src="http://localhost:8080/img/groups/1.png" />
-                                </Flex.Item>
-                            </Flex>
-                        )}
+                        renderItem={this.renderItem}
+                    />
+                </div>
+
+                {/* 最新资讯 */}
+                <div className="news">
+                    <h3>最新资讯</h3>
+                    <Grid data={this.state.news}
+                        columnNum={1}
+                        square={false}
+                        hasLine={false}
+                        renderItem={this.renderNews}
                     />
                 </div>
             </div>
-
         );
     }
 }

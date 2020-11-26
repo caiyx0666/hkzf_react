@@ -5,6 +5,10 @@ body {
     color: #333;
 }
 
+#root {
+    height: 100%;
+}
+
 
 * {
     box-sizing: border-box;
