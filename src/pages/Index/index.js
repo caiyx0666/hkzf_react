@@ -2,6 +2,7 @@ import React from 'react'
 import { Carousel, Grid, Flex } from 'antd-mobile';
 import axios from 'axios'
 import './index.scss'
+import getCityInfo from '../../utils/getCityInfo'
 
 
 import Nav1 from '../../assets/images/nav-1.png'
@@ -24,25 +25,14 @@ export default class Index extends React.Component {
         groups: [],
         cityInfo: null
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.getSwipers()
         this.getGroups()
         this.getNews()
 
-        var myCity = new window.BMap.LocalCity();
-        myCity.get((result) => {
-            var cityName = result.name;
-            // console.log(cityName);
-            this.getCityInfo(cityName)
-        });
-    }
-
-    // 获取城市信息
-    async getCityInfo(cityName){
-        const res = await axios.get(`http://localhost:8080/area/info?name=${cityName}`)
-        // console.log(res);
+        const cityName = await getCityInfo()
         this.setState({
-            cityInfo: res.data.body
+            cityInfo: cityName
         })
     }
 
@@ -137,7 +127,7 @@ export default class Index extends React.Component {
                 <div className='swipers'>
                     <div className="search-box">
                         <div className="search">
-                            <div className="location">
+                            <div className="location" onClick={()=>this.props.history.push('/citylist')}>
                                 {this.state.cityInfo ? this.state.cityInfo.label : '广州'}
                                 <i className="iconfont icon-arrow"></i>
                             </div>
