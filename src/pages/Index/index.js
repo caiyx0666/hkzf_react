@@ -21,12 +21,29 @@ export default class Index extends React.Component {
         swipers: [],
         imgHeight: 212,
         news: [],
-        groups: []
+        groups: [],
+        cityInfo: null
     }
     componentDidMount() {
         this.getSwipers()
         this.getGroups()
         this.getNews()
+
+        var myCity = new window.BMap.LocalCity();
+        myCity.get((result) => {
+            var cityName = result.name;
+            // console.log(cityName);
+            this.getCityInfo(cityName)
+        });
+    }
+
+    // 获取城市信息
+    async getCityInfo(cityName){
+        const res = await axios.get(`http://localhost:8080/area/info?name=${cityName}`)
+        // console.log(res);
+        this.setState({
+            cityInfo: res.data.body
+        })
     }
 
     // 导航栏点击跳转事件
@@ -121,7 +138,7 @@ export default class Index extends React.Component {
                     <div className="search-box">
                         <div className="search">
                             <div className="location">
-                                广州
+                                {this.state.cityInfo ? this.state.cityInfo.label : '广州'}
                                 <i className="iconfont icon-arrow"></i>
                             </div>
                             <div className="form">
