@@ -38,6 +38,16 @@ export default class CityList extends Component {
         }
     }
 
+    // 动态切换显示高亮
+    onRowsRendered = ({startIndex})=>{
+        if(startIndex === this.state.curIndex){
+            return
+        }
+        this.setState({
+            curIndex: startIndex
+        })
+    }
+
     // 渲染每一行的信息
     rowRenderer = ({
         key, // Unique key within array of rows
@@ -115,6 +125,7 @@ export default class CityList extends Component {
                             rowCount={this.state.cityIndex.length}
                             rowHeight={this.getRowHeight}
                             rowRenderer={this.rowRenderer}
+                            onRowsRendered={this.onRowsRendered}
                         />
                     )}
                 </AutoSizer>
