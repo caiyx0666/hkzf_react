@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NavBar, Icon } from 'antd-mobile';
+import { NavBar, Icon, Toast } from 'antd-mobile';
 import './index.scss'
 import axios from 'axios'
 import getCityInfo from '../../utils/getCityInfo'
@@ -40,21 +40,35 @@ export default class CityList extends Component {
         this.listRef = React.createRef()
     }
 
-    // 切换
+    // 点击城市进行切换
+    changeCity(item){
+        if(['北京','上海','广州','深圳'].indexOf(item.label) > -1){
+            // 正常切换
+            localStorage.setItem('cityName',JSON.stringify(item))
+
+            this.props.history.go(-1)
+        }else{
+            // 没有房源
+            Toast.info('该城市暂无房源数据!',2,null,false)
+        }
+    }
+
+    // 右侧索引点击滚动
     scrollTo(index) {
         // 通过非受控拿到List组件的实例
-        console.log(this.listRef.current);
         this.listRef.current.scrollToRow(index)
     }
 
     // 动态切换显示高亮
-    onRowsRendered = ({startIndex})=>{
-        if(startIndex === this.state.curIndex){
-            return
+    onRowsRendered = ({ startIndex }) => {
+        if (startIndex !== this.state.curIndex) {
+            this.setState({
+                curIndex: startIndex
+            },()=>{
+                console.log(this.state.curIndex);
+                console.log(startIndex);
+            })
         }
-        this.setState({
-            curIndex: startIndex
-        })
     }
 
     // 渲染每一行的信息
@@ -68,7 +82,7 @@ export default class CityList extends Component {
         const letter = this.state.cityIndex[index]
         const list = this.state.cityList[letter]
         let title = ''
-        switch(letter){
+        switch (letter) {
             case '#':
                 title = '当前城市'
                 break
@@ -83,13 +97,13 @@ export default class CityList extends Component {
         return (
             <div key={key} style={style} className="city">
                 <div className="title">{title}</div>
-                {list.map((item,index)=> (<div key={index} className="name">{item.label}</div>))}
+                {list.map((item, index) => (<div key={index} className="name" onClick={this.changeCity.bind(this,item)}>{item.label}</div>))}
             </div>
         );
     }
 
     // 获取列表每一行高度
-    getRowHeight = ({ index })=>{
+    getRowHeight = ({ index }) => {
         const letter = this.state.cityIndex[index]
         const list = this.state.cityList[letter]
 
@@ -116,10 +130,10 @@ export default class CityList extends Component {
         this.setState({
             cityList,
             cityIndex
+        }, () => {
+            // 解决List组件js驱动滚动误差问题
+            this.listRef.current.measureAllRows();
         })
-
-        // 解决List组件js驱动滚动误差问题
-        this.listRef.current.measureAllRows();
     }
 
     render() {
@@ -132,7 +146,7 @@ export default class CityList extends Component {
                 >城市选择</NavBar>
 
                 <AutoSizer>
-                    {({ height,width }) => (
+                    {({ height, width }) => (
                         <List
                             width={width}
                             height={height}
@@ -147,13 +161,13 @@ export default class CityList extends Component {
                 </AutoSizer>
 
                 <ul className="city-index">
-                        {this.state.cityIndex.map((item,index) => (
-                            <li key={index} className="city-index-item" onClick={() => this.scrollTo(index)}>
-                                <span className={index === this.state.curIndex ? 'index-active' : ''}>
-                                    {item === 'hot' ? '热' : item.toUpperCase()}
-                                </span>
-                            </li>
-                        ))}
+                    {this.state.cityIndex.map((item, index) => (
+                        <li key={index} className="city-index-item" onClick={() => this.scrollTo(index)}>
+                            <span className={index === this.state.curIndex ? 'index-active' : ''}>
+                                {item === 'hot' ? '热' : item.toUpperCase()}
+                            </span>
+                        </li>
+                    ))}
                 </ul>
             </div>
         )
