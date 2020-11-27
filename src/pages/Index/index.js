@@ -136,7 +136,7 @@ export default class Index extends React.Component {
                                 <span>请输入小区或地址</span>
                             </div>
                         </div>
-                        <i className="iconfont icon-map"></i>
+                        <i className="iconfont icon-map" onClick={()=>this.props.history.push('/map')}></i>
                     </div>
                     {this.renderSwipers()}
                 </div>

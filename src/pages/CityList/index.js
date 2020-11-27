@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { NavBar, Icon, Toast } from 'antd-mobile';
+import { Toast } from 'antd-mobile';
 import './index.scss'
 import axios from 'axios'
 import getCityInfo from '../../utils/getCityInfo'
+import NavHeader from '../../components/NavHeader'
 
 // 导入List组件
 import { List, AutoSizer } from 'react-virtualized';
@@ -60,13 +61,11 @@ export default class CityList extends Component {
     }
 
     // 动态切换显示高亮
-    onRowsRendered = ({ startIndex }) => {
-        if (startIndex !== this.state.curIndex) {
+    onRowsRendered = ({ overscanStartIndex,startIndex }) => {
+        const { curIndex } = this.state;
+        if (curIndex !== startIndex && overscanStartIndex !== 0) {
             this.setState({
                 curIndex: startIndex
-            },()=>{
-                console.log(this.state.curIndex);
-                console.log(startIndex);
             })
         }
     }
@@ -139,12 +138,7 @@ export default class CityList extends Component {
     render() {
         return (
             <div className="citylist-wrapper">
-                <NavBar
-                    mode="light"
-                    icon={<Icon type="left" />}
-                    onLeftClick={() => this.props.history.go(-1)}
-                >城市选择</NavBar>
-
+                <NavHeader>城市选择</NavHeader>
                 <AutoSizer>
                     {({ height, width }) => (
                         <List

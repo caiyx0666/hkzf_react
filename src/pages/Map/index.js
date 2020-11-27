@@ -1,5 +1,6 @@
 import { Component } from "react";
 import './index.scss'
+import NavHeader from '../../components/NavHeader'
 
 export default class Map extends Component {
     componentDidMount(){
@@ -10,6 +11,7 @@ export default class Map extends Component {
     render(){
         return(
             <div className="map-wrapper">
+                <NavHeader>地图找房</NavHeader>
                 <div id="container"></div> 
             </div>
         )
