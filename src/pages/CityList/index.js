@@ -36,6 +36,15 @@ export default class CityList extends Component {
             cityIndex: [],
             curIndex: 0
         }
+        // 创建Ref引用
+        this.listRef = React.createRef()
+    }
+
+    // 切换
+    scrollTo(index) {
+        // 通过非受控拿到List组件的实例
+        console.log(this.listRef.current);
+        this.listRef.current.scrollToRow(index)
     }
 
     // 动态切换显示高亮
@@ -99,13 +108,18 @@ export default class CityList extends Component {
         const hotCity = await axios.get('http://localhost:8080/area/hot')
         cityList.hot = hotCity.data.body
         cityIndex.unshift('hot')
+
         const myCityInfo = await getCityInfo()
         cityList['#'] = [myCityInfo]
         cityIndex.unshift('#')
+
         this.setState({
             cityList,
             cityIndex
         })
+
+        // 解决List组件js驱动滚动误差问题
+        this.listRef.current.measureAllRows();
     }
 
     render() {
@@ -126,13 +140,15 @@ export default class CityList extends Component {
                             rowHeight={this.getRowHeight}
                             rowRenderer={this.rowRenderer}
                             onRowsRendered={this.onRowsRendered}
+                            scrollToAlignment={'start'}
+                            ref={this.listRef}
                         />
                     )}
                 </AutoSizer>
 
                 <ul className="city-index">
                         {this.state.cityIndex.map((item,index) => (
-                            <li key={index} className="city-index-item">
+                            <li key={index} className="city-index-item" onClick={() => this.scrollTo(index)}>
                                 <span className={index === this.state.curIndex ? 'index-active' : ''}>
                                     {item === 'hot' ? '热' : item.toUpperCase()}
                                 </span>
