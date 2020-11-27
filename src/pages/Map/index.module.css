@@ -1,0 +1,8 @@
+.mapWrapper {
+    height: 100%;
+    padding-top: 45px;
+}
+
+:global(.am-navbar) {
+    margin-top: -45px;
+}

@@ -50,6 +50,10 @@ export default class CityList extends Component {
             this.props.history.go(-1)
         }else{
             // 没有房源
+            // 第一个参数  提示的内容
+            // 第二个参数  提示的持续时间
+            // 第三个  提示框的关闭回调
+            // 第四个参数  是否需要防止点击穿透的遮罩
             Toast.info('该城市暂无房源数据!',2,null,false)
         }
     }
@@ -61,11 +65,14 @@ export default class CityList extends Component {
     }
 
     // 动态切换显示高亮
-    onRowsRendered = ({ overscanStartIndex,startIndex }) => {
-        const { curIndex } = this.state;
-        if (curIndex !== startIndex && overscanStartIndex !== 0) {
+    onRowsRendered = ({ startIndex }) => {
+        let { curIndex } = this.state;
+        if (curIndex !== startIndex) {
             this.setState({
                 curIndex: startIndex
+            },()=>{
+                // 解决List组件js驱动滚动误差问题
+                this.listRef.current.measureAllRows();
             })
         }
     }
