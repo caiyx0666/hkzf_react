@@ -71,6 +71,9 @@ export default class Map extends Component {
                 position: labelPoint, // 指定文本标注所在的地理位置
                 offset: new window.BMap.Size(-35, -35) // 设置文本偏移量
             };
+
+            // 判断
+
             // 创建文本标注对象
             var label = new window.BMap.Label(`${name}<br/>${count}套`, opts);
             // label.setContent(`<p>${item.label}</p><p>${item.count}<p/>`)
@@ -78,26 +81,31 @@ export default class Map extends Component {
             // 自定义文本标注样式
             label.setStyle(labelStyle);
             // 给绘制点添加点击事件
-            label.addEventListener('click', () => {
-                // 开启动画
-                Toast.loading('加载中...',0,null,false)
-                // 地图发生移动
-                // map.panTo(labelPoint)
-                // 放大地图
-                // map.setZoom(13)
-                this.map.centerAndZoom(labelPoint, nextZoom);
-                // 清除原来的覆盖物
-                setTimeout(() => {
-                    this.map.clearOverlays()
-                }, 0)
-                // 请求镇的数据，渲染成覆盖物
-                axios.get(`http://localhost:8080/area/map?id=${value}`).then(res => {
-                    let mapList = res.data.body
-                    console.log(mapList)
-                    this.createOverlays(mapList)
-                })
 
-            })
+            let zoom = this.map.getZoom()
+            if(zoom != 15){
+                label.addEventListener('click', () => {
+                    // 开启动画
+                    Toast.loading('加载中...',0,null,false)
+                    // 地图发生移动
+                    // map.panTo(labelPoint)
+                    // 放大地图
+                    // map.setZoom(13)
+                    this.map.centerAndZoom(labelPoint, nextZoom);
+                    // 清除原来的覆盖物
+                    setTimeout(() => {
+                        this.map.clearOverlays()
+                    }, 0)
+                    // 请求镇的数据，渲染成覆盖物
+                    axios.get(`http://localhost:8080/area/map?id=${value}`).then(res => {
+                        let mapList = res.data.body
+                        console.log(mapList)
+                        this.createOverlays(mapList)
+                    })
+    
+                })
+            }
+            
             this.map.addOverlay(label)
             Toast.hide()
         })
