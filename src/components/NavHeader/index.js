@@ -1,10 +1,10 @@
-import { NavBar, Icon } from 'antd-mobile'
+import { NavBar, Icon, Toast } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import propTypes from 'prop-types'
 import styles from './index.module.css';
 
 function NavHeader(props) {
-    const defaultHandle = () =>{props.history.go(-1)}
+    const defaultHandle = () =>{ props.history.go(-1); Toast.hide()}
     return (
         <NavBar
             mode="light"
