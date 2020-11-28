@@ -3,12 +3,14 @@ import styles from './index.module.css'
 import NavHeader from '../../components/NavHeader'
 import getCurrentCity from '../../utils/getCityInfo'
 import axios from "axios";
+import { Toast } from "antd-mobile";
 
 export default class Map extends Component {
     async componentDidMount() {
+        // 开启loading动画
+        Toast.loading('加载中...',30)
 
         // 发送请求获取房源信息
-
         let { label, value } = await getCurrentCity()
         let res = await axios.get(`http://localhost:8080/area/map?id=${value}`)
         console.log(res.data.body);
@@ -23,17 +25,13 @@ export default class Map extends Component {
             if (point) {
                 map.centerAndZoom(point, 11);
                 
+                
+                
                 mapList.forEach(item => {
-                    // 对经纬度进行改造
-                    let H = {}
-                    for(let i in item.coord){
-                        if(i === 'latitude') H.lat = item.coord[i]
-                        if(i === 'longitude') H.lng = item.coord[i]
-                    }
                     
                     var opts = {
-                        position: H, // 指定文本标注所在的地理位置
-                        // offset: new window.BMap.Size(30, -30) // 设置文本偏移量
+                        position: new window.BMap.Point(item.coord.longitude,item.coord.latitude,), // 指定文本标注所在的地理位置
+                        offset: new window.BMap.Size(-35, -35) // 设置文本偏移量
                     };
                     // 创建文本标注对象
                     var label = new window.BMap.Label(`${item.label}<br/>${item.count}套`, opts);
@@ -56,6 +54,8 @@ export default class Map extends Component {
                     // 给绘制点添加点击事件
                     map.addOverlay(label)
                 })
+                // 关闭动画
+                Toast.hide()
                 map.addControl(new window.BMap.NavigationControl());
                 map.addControl(new window.BMap.ScaleControl());
                 // map.addControl(new window.BMap.OverviewMapControl());
