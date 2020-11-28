@@ -79,18 +79,13 @@ export default class Map extends Component {
     
             var opts = {
                 position: labelPoint, // 指定文本标注所在的地理位置
-                offset: new window.BMap.Size(-35, -35) // 设置文本偏移量
+                offset: new window.BMap.Size(-60, -10) // 设置文本偏移量
             };
             let zoom = this.map.getZoom()
             // 判断应该显示的样式
-            if(zoom )
-
-            
-
-            
             if(zoom != 15){
                 // 创建文本标注对象
-                var label = new window.BMap.Label(`${name}<br/>${count}套`, opts);
+                var label = new window.BMap.Label(`<div className="${styles.rectStyle}">${name}<br/>${count}套</div>`, opts);
                 // label.setContent(`<p>${item.label}</p><p>${item.count}<p/>`)
 
                 // 自定义文本标注样式
@@ -118,7 +113,10 @@ export default class Map extends Component {
                 })
             }else {
                 // 创建文本标注对象
-                var label = new window.BMap.Label(`<p>${name.substring(0,4)}...${count}套</p>`, opts);
+                var label = new window.BMap.Label(`
+                    <div>${name.substring(0,4)}...${count}套</div>
+                    <i class="${styles.traingle}"></i>
+                `, opts);
                 // label.setContent(`<p>${item.label}</p><p>${item.count}<p/>`)
 
                 // 自定义文本标注样式
