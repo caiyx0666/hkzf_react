@@ -5,17 +5,29 @@ import getCurrentCity from '../../utils/getCityInfo'
 import axios from "axios";
 import { Toast } from "antd-mobile";
 
-const labelStyle = {
+const cicleStyle = {
     color: '#fff',
     borderRadius: '50%',
     borderColor: '#fff',
     borderSize: '1px',
     backgroundColor: '#24b96b',
+    textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '70px',
     height: '70px',
+    fontSize: '12px',
+    fontFamily: '微软雅黑'
+}
+
+const rectStyle = {
+    color: '#fff',
+    backgroundColor: '#24b96b',
+    border: 'none',
+    padding: '0 10px',
+    height: '20px',
+    lineHeight: '20px',
     fontSize: '12px',
     fontFamily: '微软雅黑'
 }
@@ -71,19 +83,23 @@ export default class Map extends Component {
                 position: labelPoint, // 指定文本标注所在的地理位置
                 offset: new window.BMap.Size(-35, -35) // 设置文本偏移量
             };
-
-            // 判断
-
-            // 创建文本标注对象
-            var label = new window.BMap.Label(`${name}<br/>${count}套`, opts);
-            // label.setContent(`<p>${item.label}</p><p>${item.count}<p/>`)
-
-            // 自定义文本标注样式
-            label.setStyle(labelStyle);
-            // 给绘制点添加点击事件
-
             let zoom = this.map.getZoom()
+            console.log(zoom);
+            // 判断应该显示的样式
+            if(zoom )
+
+            
+
+            
             if(zoom != 15){
+                // 创建文本标注对象
+                var label = new window.BMap.Label(`${name}<br/>${count}套`, opts);
+                // label.setContent(`<p>${item.label}</p><p>${item.count}<p/>`)
+
+                // 自定义文本标注样式
+                label.setStyle(cicleStyle);
+                // 给绘制点添加点击事件
+
                 label.addEventListener('click', () => {
                     // 开启动画
                     Toast.loading('加载中...',0,null,false)
@@ -104,6 +120,14 @@ export default class Map extends Component {
                     })
     
                 })
+            }else {
+                // 创建文本标注对象
+                var label = new window.BMap.Label(`${name.substring(0,4)}...${count}套`, opts);
+                // label.setContent(`<p>${item.label}</p><p>${item.count}<p/>`)
+
+                // 自定义文本标注样式
+                label.setStyle(rectStyle);
+                // 给绘制点添加点击事件
             }
             
             this.map.addOverlay(label)
