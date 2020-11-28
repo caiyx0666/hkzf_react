@@ -42,13 +42,11 @@ export default class Map extends Component {
         // 区 zoom  -> 11     nextZoom 13  type circle  zoom 11   10<zoom < 12
         // 镇 zoom  -> 13     nextZoom 15  type rect zoom 11   12 <zoom < 14
         // 小区 zoom -> 15    14 <zoom < 16
-        console.log(zoom);
         if ( zoom > 12) {
             nextZoom = 15
             type = 'rect'
         }else if (10 < zoom < 12) {
             nextZoom = 13
-            console.log('我变成13了');
             type = 'cicle'
         }else{
             nextZoom = 11
@@ -74,7 +72,7 @@ export default class Map extends Component {
     // 创建覆盖物
     createOverlays(mapList) {
         let { nextZoom,type } = this.getTypeAndNextZoom()
-        console.log(nextZoom)
+        // console.log(nextZoom)
         mapList.forEach(item => {
             let { label: name, count, value, coord: { longitude, latitude } } = item
             let labelPoint = new window.BMap.Point(longitude, latitude)
@@ -84,7 +82,6 @@ export default class Map extends Component {
                 offset: new window.BMap.Size(-35, -35) // 设置文本偏移量
             };
             let zoom = this.map.getZoom()
-            console.log(zoom);
             // 判断应该显示的样式
             if(zoom )
 
@@ -115,14 +112,13 @@ export default class Map extends Component {
                     // 请求镇的数据，渲染成覆盖物
                     axios.get(`http://localhost:8080/area/map?id=${value}`).then(res => {
                         let mapList = res.data.body
-                        console.log(mapList)
                         this.createOverlays(mapList)
                     })
     
                 })
             }else {
                 // 创建文本标注对象
-                var label = new window.BMap.Label(`${name.substring(0,4)}...${count}套`, opts);
+                var label = new window.BMap.Label(`<p>${name.substring(0,4)}...${count}套</p>`, opts);
                 // label.setContent(`<p>${item.label}</p><p>${item.count}<p/>`)
 
                 // 自定义文本标注样式
@@ -151,7 +147,6 @@ export default class Map extends Component {
         // 发送请求获取房源信息
         let { label, value } = await getCurrentCity()
         let res = await axios.get(`http://localhost:8080/area/map?id=${value}`)
-        console.log(res.data.body);
         this.mapList = res.data.body
 
         var map = new window.BMap.Map("container");
