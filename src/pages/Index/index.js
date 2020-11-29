@@ -3,6 +3,7 @@ import { Carousel, Grid, Flex } from 'antd-mobile';
 // import axios from 'axios'
 
 import API  from '../../utils/api';
+import  BASE_URL from '../../utils/url';
 import './index.scss'
 import getCityInfo from '../../utils/getCityInfo'
 
@@ -87,7 +88,7 @@ export default class Index extends React.Component {
                 style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
             >
                 <img
-                    src={`http://localhost:8080${item.imgSrc}`}
+                    src={`${BASE_URL}${item.imgSrc}`}
                     alt=""
                     style={{ width: '100%', verticalAlign: 'top' }}
                 />
@@ -103,14 +104,14 @@ export default class Index extends React.Component {
                 <p>{item.desc}</p>
             </Flex.Item>
             <Flex.Item className="item">
-                <img src={`http://localhost:8080${item.imgSrc}`} alt="" />
+                <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
             </Flex.Item>
         </Flex>)
 
     // 渲染最新资讯列表 
     renderNews = (item) => (
         <Flex className="news-item">
-            <img src={`http://localhost:8080${item.imgSrc}`} alt="" />
+            <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
             <Flex justify="center" className="desc" direction="column" align="start">
                 <h3>{item.title}</h3>
                 <Flex justify="between" className="info">

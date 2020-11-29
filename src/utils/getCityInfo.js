@@ -19,7 +19,7 @@ export default function getCityInfo() {
             myCity.get(async (result) => {
                 var cityName = result.name;
                 console.log(cityName);
-                const res = await API.get(`http://localhost:8080/area/info?name=${cityName}`)
+                const res = await API.get(`/area/info?name=${cityName}`)
                 localStorage.setItem('cityName',JSON.stringify(res.data.body))
                 resolve(res.data.body)
             });
