@@ -1,6 +1,7 @@
 import React from 'react'
 import { Carousel, Grid, Flex } from 'antd-mobile';
 // import axios from 'axios'
+import SearchBox from '../../components/SearchBox'
 
 import API  from '../../utils/api';
 import  BASE_URL from '../../utils/url';
@@ -128,19 +129,7 @@ export default class Index extends React.Component {
 
                 {/* 轮播图区域 */}
                 <div className='swipers'>
-                    <div className="search-box">
-                        <div className="search">
-                            <div className="location" onClick={()=>this.props.history.push('/citylist')}>
-                                {this.state.cityInfo ? this.state.cityInfo.label : '广州'}
-                                <i className="iconfont icon-arrow"></i>
-                            </div>
-                            <div className="form">
-                                <i className="iconfont icon-seach"></i>
-                                <span>请输入小区或地址</span>
-                            </div>
-                        </div>
-                        <i className="iconfont icon-map" onClick={()=>this.props.history.push('/map')}></i>
-                    </div>
+                    <SearchBox />
                     {this.renderSwipers()}
                 </div>
 
