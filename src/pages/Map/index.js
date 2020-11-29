@@ -177,7 +177,7 @@ export default class Map extends Component {
                     })
                 })
 
-                this.map.addEventListener('click',()=>{
+                this.map.addEventListener('dragstart',()=>{
                     this.setState({
                         show: false
                     })
@@ -208,7 +208,7 @@ export default class Map extends Component {
                     <div className={styles.houselist}>
                         {this.state.houselist.length ? this.state.houselist.map(item => (
                             <div className={styles.houseItem} key={item.houseCode}>
-                                <img src={`http://localhost:8080${item.houseImg}`} />
+                                <img src={`http://localhost:8080${item.houseImg}`}  alt=""/>
                                 <div className={styles.houseRight}>
                                     <h4>{item.title}</h4>
                                     <p>{item.desc}</p>
