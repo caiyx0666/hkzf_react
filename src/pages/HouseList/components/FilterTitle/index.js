@@ -15,13 +15,18 @@ const titleList = [
 export default function FilterTitle() {
   return (
     <Flex align="center" className={styles.root}>
-      <Flex.Item>
-        {/* 选中类名： selected */}
-        <span className={[styles.dropdown, styles.selected].join(' ')}>
-          <span>区域</span>
-          <i className="iconfont icon-arrow" />
-        </span>
-      </Flex.Item>
+
+      {titleList.map(item => (
+        <Flex.Item>
+          <span className={[styles.dropdown, styles.selected].join(' ')}>
+            <span>{item.title}</span>
+            <i className="iconfont icon-arrow" />
+          </span>
+        </Flex.Item>
+      ))}
+      {/* 选中类名： selected */}
+
+
     </Flex>
   )
 }
