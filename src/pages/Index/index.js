@@ -1,6 +1,8 @@
 import React from 'react'
 import { Carousel, Grid, Flex } from 'antd-mobile';
-import axios from 'axios'
+// import axios from 'axios'
+
+import API  from '../../utils/api';
 import './index.scss'
 import getCityInfo from '../../utils/getCityInfo'
 
@@ -43,7 +45,7 @@ export default class Index extends React.Component {
 
     // 获取轮播图信息
     async getSwipers() {
-        let res = await axios.get('http://localhost:8080/home/swiper')
+        let res = await API.get('/home/swiper')
         this.setState({
             swipers: res.data.body
         })
@@ -51,7 +53,7 @@ export default class Index extends React.Component {
 
     // 获取租房小组信息
     async getGroups() {
-        const res = await axios.get('http://localhost:8080/home/groups', {
+        const res = await API.get('/home/groups', {
             params: {
                 area: 'AREA%7C88cff55c-aaa4-e2e0'
             }
@@ -63,7 +65,7 @@ export default class Index extends React.Component {
 
     // 获取最新资讯信息
     async getNews() {
-        const res = await axios.get('http://localhost:8080/home/news', {
+        const res = await API.get('/home/news', {
             params: {
                 area: 'AREA%7C88cff55c-aaa4-e2e0'
             }

@@ -2,7 +2,9 @@ import { Component } from "react";
 import styles from './index.module.scss'
 import NavHeader from '../../components/NavHeader'
 import getCurrentCity from '../../utils/getCityInfo'
-import axios from "axios";
+// import axios from "axios";
+
+import API  from '../../utils/api';
 import { Toast } from "antd-mobile";
 
 // 原型覆盖物的样式
@@ -77,7 +79,7 @@ export default class Map extends Component {
 
         // 发送请求获取房源信息
         let { label, value } = await getCurrentCity()
-        let res = await axios.get(`http://localhost:8080/area/map?id=${value}`)
+        let res = await API.get(`http://localhost:8080/area/map?id=${value}`)
         this.mapList = res.data.body
 
         var map = new window.BMap.Map("container");
@@ -143,7 +145,7 @@ export default class Map extends Component {
                         this.map.clearOverlays()
                     }, 0)
                     // 请求镇的数据，渲染成覆盖物
-                    axios.get(`http://localhost:8080/area/map?id=${value}`).then(res => {
+                    API.get(`http://localhost:8080/area/map?id=${value}`).then(res => {
                         let mapList = res.data.body
                         this.createOverlays(mapList)
                     })
@@ -166,7 +168,7 @@ export default class Map extends Component {
                     // 开启动画
                     Toast.loading('加载中...', 0, null, false)
 
-                    axios.get(`http://localhost:8080/houses?cityId=${value}`).then(res => {
+                    API.get(`http://localhost:8080/houses?cityId=${value}`).then(res => {
                         Toast.hide()
                         let { list } = res.data.body
                         this.setState({

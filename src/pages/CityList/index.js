@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Toast } from 'antd-mobile';
 import './index.scss'
-import axios from 'axios'
+// import axios from 'axios'
+
+import API  from '../../utils/api';
 import getCityInfo from '../../utils/getCityInfo'
 import NavHeader from '../../components/NavHeader'
 
@@ -122,10 +124,10 @@ export default class CityList extends Component {
 
     // 获取城市信息
     async fetchCityList() {
-        const city = await axios.get('http://localhost:8080/area/city?level=1')
+        const city = await API.get('/area/city?level=1')
         const { cityList, cityIndex } = formatCityList(city.data.body)
 
-        const hotCity = await axios.get('http://localhost:8080/area/hot')
+        const hotCity = await API.get('/area/hot')
         cityList.hot = hotCity.data.body
         cityIndex.unshift('hot')
 
