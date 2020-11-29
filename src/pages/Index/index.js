@@ -30,14 +30,14 @@ export default class Index extends React.Component {
         cityInfo: null
     }
     async componentDidMount() {
-        this.getSwipers()
-        this.getGroups()
-        this.getNews()
-
         const cityName = await getCityInfo()
         this.setState({
             cityInfo: cityName
         })
+
+        this.getSwipers()
+        this.getGroups()
+        this.getNews()
     }
 
     // 导航栏点击跳转事件
@@ -57,9 +57,10 @@ export default class Index extends React.Component {
     async getGroups() {
         const res = await API.get('/home/groups', {
             params: {
-                area: 'AREA%7C88cff55c-aaa4-e2e0'
+                area: this.state.cityInfo.value
             }
         })
+        console.log('租房小组',res.data.body);
         this.setState({
             groups: res.data.body
         })
@@ -69,9 +70,10 @@ export default class Index extends React.Component {
     async getNews() {
         const res = await API.get('/home/news', {
             params: {
-                area: 'AREA%7C88cff55c-aaa4-e2e0'
+                area: this.state.cityInfo.value
             }
         })
+        console.log('news',res.data.body);
         this.setState({
             news: res.data.body
         })
