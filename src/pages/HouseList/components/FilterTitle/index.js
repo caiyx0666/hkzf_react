@@ -12,13 +12,14 @@ const titleList = [
   { title: '筛选', type: 'more' }
 ]
 
-export default function FilterTitle() {
+export default function FilterTitle({ onClick,titleSelectedStatus }) {
   return (
     <Flex align="center" className={styles.root}>
 
-      {titleList.map(item => (
-        <Flex.Item>
-          <span className={[styles.dropdown, styles.selected].join(' ')}>
+      {titleList.map((item,index) => (
+
+        <Flex.Item key={index} onClick={()=> onClick(item.type)}>
+          <span className={[styles.dropdown, titleSelectedStatus[item.type] ? styles.selected : ''].join(' ')}>
             <span>{item.title}</span>
             <i className="iconfont icon-arrow" />
           </span>
