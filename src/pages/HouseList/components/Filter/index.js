@@ -90,6 +90,19 @@ export default class Filter extends Component {
     onCancel={this.onCancel} onSave={this.onSave} type={openType} />
   }
 
+  renderFilterMore() {
+    const { openType, filterData: {
+      roomType, oriented, floor, characteristic
+    } } = this.state;
+
+    if (openType !== 'more') {
+      return null;
+    }
+
+    return <FilterMore roomType={roomType} oriented={oriented} floor={floor} characteristic={characteristic} />
+
+  }
+
   state = {
     titleSelectedStatus,
     openType: '',
@@ -184,7 +197,7 @@ export default class Filter extends Component {
 
           {/* 最后一个菜单对应的内容： */}
           {/* <FilterMore /> */}
-          {openType === 'more' ? <FilterMore onClick={this.handleMore} /> : null}
+          {this.renderFilterMore()}
         </div>
       </div>
     )
