@@ -79,7 +79,6 @@ export default class Filter extends Component {
   }
 
   onSave = (type, value) => {
-    console.log('我点击了确定按钮');
     const { titleSelectedStatus, selectedValues } = this.state;
 
 
@@ -234,17 +233,17 @@ export default class Filter extends Component {
     })
   }
 
-  handleClickMask = () => {
-    this.setState({
-      titleSelectedStatus: {
-        area: false,
-        mode: false,
-        price: false,
-        more: false,
-      },
-      openType: ''
-    })
-  }
+  // handleClickMask = () => {
+  //   this.setState({
+  //     titleSelectedStatus: {
+  //       area: false,
+  //       mode: false,
+  //       price: false,
+  //       more: false,
+  //     },
+  //     openType: ''
+  //   })
+  // }
 
   render() {
     const { openType } = this.state
@@ -252,7 +251,7 @@ export default class Filter extends Component {
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
         {  openType === 'area' || openType === 'mode'
-          || openType === 'price' ? <div className={styles.mask} onClick={this.handleClickMask} /> : null}
+          || openType === 'price' ? <div className={styles.mask} onClick={this.onCancel} /> : null}
 
         <div className={styles.content}>
           {/* 标题栏 */}
