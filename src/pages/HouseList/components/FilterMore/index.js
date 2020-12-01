@@ -48,8 +48,6 @@ export default class FilterMore extends Component {
     },()=>{
       this.onSave()
     })
-    // this.props.onCancel()
-    // this.onSave()
   }
 
   // 确认按钮点击事件
@@ -85,7 +83,7 @@ export default class FilterMore extends Component {
         <FilterFooter 
           cancelText="清除"
           onCancel={this.onCancel}
-          onSave={this.onSave}
+          onOk={this.onSave}
           className={styles.footer} />
       </div>
     )
