@@ -17,6 +17,13 @@ const titleSelectedStatus = {
   more: false,
 }
 
+const selectedValues = {
+  area: ['area', null],
+  mode: [null],
+  price: [null],
+  more: null
+}
+
 export default class Filter extends Component {
 
   componentDidMount(){
@@ -29,6 +36,7 @@ export default class Filter extends Component {
     this.setState({
       filterData: res.data.body
     })
+    console.log(res.data.data);
   }
 
   onCancel = () => {
@@ -37,21 +45,28 @@ export default class Filter extends Component {
     })
   }
 
-  onSave = () => {
+  onSave = (type, value) => {
+
+    const { selectedValues } = this.state;
     this.setState({
-      openType: ''
+      openType: '',
+      selectedValues: {
+        ...selectedValues,
+        [type]: value
+      }
     })
   }
 
   renderFilterPicker(){
     const { openType,filterData:{
       area,subway,rentType,price
-    } } = this.state
+    }, selectedValues } = this.state
 
     if(openType !== 'area' && openType !== 'mode' && openType !== 'price') return null
 
     let data = []
     let cols = 3
+    let defaultValue = selectedValues[openType];
 
     switch(openType){
       case 'area':
@@ -60,6 +75,7 @@ export default class Filter extends Component {
 
       case 'mode':
         data= rentType
+        cols = 1
         break;
 
       case 'price':
@@ -71,13 +87,15 @@ export default class Filter extends Component {
         break;
     }
 
-    return <FilterPicker data={data} cols={cols} onCancel={this.onCancel} onSave={this.onSave} />
+    return <FilterPicker defaultValue={defaultValue} data={data} cols={cols}
+    onCancel={this.onCancel} onSave={this.onSave} type={openType} />
   }
 
   state = {
     titleSelectedStatus,
     openType: '',
-    filterData: {}
+    filterData: {},
+    selectedValues
   }
 
   onTitleClick = (type) => {
@@ -99,7 +117,6 @@ export default class Filter extends Component {
       },
       openType: ''
     })
-    console.log('1');
   }
 
   render() {
