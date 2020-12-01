@@ -21,10 +21,17 @@ const selectedValues = {
   area: ['area', null],
   mode: ['null'],
   price: ['null'],
-  more: null
+  more: []
 }
 
 export default class Filter extends Component {
+
+  state = {
+    titleSelectedStatus,
+    openType: '',
+    filterData: {},
+    selectedValues
+  }
 
   componentDidMount(){
     this.getHouseFilter()
@@ -93,21 +100,24 @@ export default class Filter extends Component {
   renderFilterMore() {
     const { openType, filterData: {
       roomType, oriented, floor, characteristic
-    } } = this.state;
+    },selectedValues } = this.state;
 
     if (openType !== 'more') {
       return null;
     }
 
-    return <FilterMore roomType={roomType} oriented={oriented} floor={floor} characteristic={characteristic} />
+    let defaultValue = selectedValues.more
 
-  }
+    return <FilterMore
+      roomType={roomType}
+      oriented={oriented}
+      floor={floor}
+      characteristic={characteristic} 
+      onCancel={this.onCancel}
+      onSave={this.onSave}
+      defaultValue={defaultValue}
+      />
 
-  state = {
-    titleSelectedStatus,
-    openType: '',
-    filterData: {},
-    selectedValues
   }
 
   /* 
@@ -130,7 +140,7 @@ export default class Filter extends Component {
  */
 
   onTitleClick = (type) => {
-    console.log(type);
+    // console.log(type);
     const { titleSelectedStatus, selectedValues} = this.state
     let newTitleSelectedStatus = {...titleSelectedStatus}
 
@@ -140,8 +150,8 @@ export default class Filter extends Component {
         return
       }
       let selectedVal = selectedValues[key]
-      console.log(selectedVal,key);
-      console.log(newTitleSelectedStatus);
+      // console.log(selectedVal,key);
+      // console.log(newTitleSelectedStatus);
 
       if(key === 'area' && (selectedVal.length !== 2 || selectedVal[0] !== 'area')){
         newTitleSelectedStatus[key] = true
