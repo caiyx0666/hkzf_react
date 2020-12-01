@@ -19,8 +19,8 @@ const titleSelectedStatus = {
 
 const selectedValues = {
   area: ['area', null],
-  mode: [null],
-  price: [null],
+  mode: ['null'],
+  price: ['null'],
   more: null
 }
 
@@ -36,7 +36,6 @@ export default class Filter extends Component {
     this.setState({
       filterData: res.data.body
     })
-    console.log(res.data.data);
   }
 
   onCancel = () => {
@@ -87,7 +86,7 @@ export default class Filter extends Component {
         break;
     }
 
-    return <FilterPicker defaultValue={defaultValue} data={data} cols={cols}
+    return <FilterPicker key={openType} defaultValue={defaultValue} data={data} cols={cols}
     onCancel={this.onCancel} onSave={this.onSave} type={openType} />
   }
 
@@ -98,11 +97,60 @@ export default class Filter extends Component {
     selectedValues
   }
 
+  /* 
+   // 高亮：
+   // selectedVal 表示当前 type 的选中值
+   // 
+   // 如果 type 为 area，此时，selectedVal.length !== 2 || selectedVal[0] !== 'area'，就表示已经有选中值
+   // 如果 type 为 mode，此时，selectedVal[0] !== 'null'，就表示已经有选中值
+   // 如果 type 为 price，此时，selectedVal[0] !== 'null'，就表示已经有选中值
+   // 如果 type 为 more, ...
+   实现步骤：
+   1 在标题点击事件 onTitleClick 方法中，获取到两个状态：标题选中状态对象和筛选条件的选中值对象。
+   2 根据当前标题选中状态对象，获取到一个新的标题选中状态对象（newTitleSelectedStatus）。
+   3 使用 Object.keys() 方法，遍历标题选中状态对象。
+   4 先判断是否为当前标题，如果是，直接让该标题选中状态为 true（高亮）。
+   5 否则，分别判断每个标题的选中值是否与默认值相同。
+   6 如果不同，则设置该标题的选中状态为 true。
+   7 如果相同，则设置该标题的选中状态为 false。
+   8 更新状态 titleSelectedStatus 的值为：newTitleSelectedStatus。
+ */
+
   onTitleClick = (type) => {
+    console.log(type);
+    const { titleSelectedStatus, selectedValues} = this.state
+    let newTitleSelectedStatus = {...titleSelectedStatus}
+
+    Object.keys(titleSelectedStatus).forEach(key => {
+      if(type === key){
+        newTitleSelectedStatus[type] = true
+        return
+      }
+      let selectedVal = selectedValues[key]
+      console.log(selectedVal,key);
+      console.log(newTitleSelectedStatus);
+
+      if(key === 'area' && (selectedVal.length !== 2 || selectedVal[0] !== 'area')){
+        newTitleSelectedStatus[key] = true
+
+      }else if(key === 'mode' && selectedVal[0] !== 'null'){
+        newTitleSelectedStatus[key] = true
+
+      }else if(key === 'price' && selectedVal[0] !== 'null'){
+        newTitleSelectedStatus[key] = true
+
+      }else if(key === 'more'){
+        // TODO
+
+      }else{
+        newTitleSelectedStatus[key] = false
+
+      }
+    })
+
+
     this.setState({
-      titleSelectedStatus: {
-        ...titleSelectedStatus, [type]: true
-      },
+      titleSelectedStatus: newTitleSelectedStatus,
       openType: type
     })
   }

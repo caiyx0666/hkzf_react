@@ -22,7 +22,10 @@ export default class FilterPicker extends Component {
       <>
         {/* 选择器组件： */}
         <PickerView data={data} value={this.state.value}
-          onChange={(val) => this.setState({ value: val })}
+          onChange={(val) => {
+            console.log(val);
+            this.setState({ value: val })
+          }}
           cols={cols} />
 
         {/* 底部按钮 */}
