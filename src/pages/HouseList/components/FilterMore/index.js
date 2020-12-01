@@ -17,7 +17,7 @@ export default class FilterMore extends Component {
     return (
       <div className={styles.root}>
         {/* 遮罩层 */}
-        <div className={styles.mask} />
+        <div className={[styles.mask]}  />
 
         {/* 条件内容 */}
         <div className={styles.tags}>
