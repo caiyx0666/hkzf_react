@@ -136,7 +136,7 @@ export default class Filter extends Component {
 
     Object.keys(titleSelectedStatus).forEach(key => {
       if(type === key){
-        newTitleSelectedStatus[type] = true
+        newTitleSelectedStatus[key] = true
         return
       }
       let selectedVal = selectedValues[key]

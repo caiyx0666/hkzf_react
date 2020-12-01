@@ -5,13 +5,35 @@ import FilterFooter from '../../../../components/FilterFooter'
 import styles from './index.module.css'
 
 export default class FilterMore extends Component {
+  state = {
+    selectedValues: []
+  }
+
+  handleSelect(id){
+    // console.log(id);
+    const { selectedValues } = this.state
+    if(selectedValues.some(item => item === id)){
+      let index = selectedValues.findIndex(i => i === id)
+      selectedValues.splice(index,1)
+    }else{
+      selectedValues.push(id)
+    }
+
+    this.setState({
+      selectedValues: selectedValues
+    })
+  }
+
   // 渲染标签
   renderFilters(list) {
     // 高亮类名： styles.tagActive
     return (
       <div>
         {list.map(item => (
-          <span key={item.value} className={[styles.tag, styles.tagActive].join(' ')}>{item.label}</span>
+          <span key={item.value} 
+            className={[styles.tag , this.state.selectedValues.includes(item.value) ? styles.tagActive : ''].join(' ')}
+            onClick={this.handleSelect.bind(this, item.value)}
+            >{item.label}</span>
         ))}
       </div>
       // <span className={[styles.tag, styles.tagActive].join(' ')}>东北</span>
