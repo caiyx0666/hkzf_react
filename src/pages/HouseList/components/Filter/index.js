@@ -109,6 +109,31 @@ export default class Filter extends Component {
       }
     });
 
+    console.log(newSelectedValues);
+
+    let filters = {}
+
+    // 处理区域数据结果
+    let areaKey = newSelectedValues.area[0] === 'area' ? 'area' : 'subway'
+    let areaValue = newSelectedValues.area[1]
+
+    if(newSelectedValues.area.length === 3 && newSelectedValues.area[2] !== 'null'){
+      areaValue = newSelectedValues.area[2]
+    }
+
+    filters[areaKey] = areaValue
+
+    // 处理 方式数据
+    filters.mode = newSelectedValues.mode[0]
+
+    // 处理价格
+    filters.price = newSelectedValues.price[0]
+
+    // 处理 筛选
+    filters.more = newSelectedValues.more.join(',')
+
+    this.props.onFilter(filters)
+
     this.setState({
       openType: '',
       selectedValues: newSelectedValues,
@@ -232,18 +257,6 @@ export default class Filter extends Component {
       openType: type
     })
   }
-
-  // handleClickMask = () => {
-  //   this.setState({
-  //     titleSelectedStatus: {
-  //       area: false,
-  //       mode: false,
-  //       price: false,
-  //       more: false,
-  //     },
-  //     openType: ''
-  //   })
-  // }
 
   render() {
     const { openType } = this.state
