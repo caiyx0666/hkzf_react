@@ -1,0 +1,22 @@
+.houselistWrapper {
+    height: 100%;
+
+    .header {
+        height: 45px;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        background-color: #f6f5f6;
+        
+        :global(.search) {
+            height: 30px;
+        }
+    }
+    :global(.icon-map) {
+        color: #00ae66;
+    }
+
+    .houseItems {
+        padding: 0 15px;
+    }
+}
